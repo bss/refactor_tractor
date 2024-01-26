@@ -33,7 +33,11 @@ module RefactorTractor
         new_content = File.read(path)
         if !original_file_path.exist? || File.read(original_file_path) != new_content
           logger.info "Replacing #{original_file_path} with #{path}"
-          File.write(original_file_path, new_content)
+          if config.dry_run
+            logger.info "... skipping due to dry-run"
+          else
+            File.write(original_file_path, new_content)
+          end
         end
       end
     end
